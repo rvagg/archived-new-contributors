@@ -69,7 +69,7 @@ gitexec.execCollect(dir, gitDaysAgoCmd, (err, ref) => {
       return done()
     }
 
-    console.log(`Loaded ${days} days old ${dir}/.mailmap with ${mailmap.split(/[\n\r]+/).length} entries...`)
+    console.log(`Loaded ${dir}/.mailmap from ${days} ago with ${mailmap.split(/[\n\r]+/).length} entries...`)
 
     done()
   })
