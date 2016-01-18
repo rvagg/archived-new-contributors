@@ -63,11 +63,13 @@ gitexec.execCollect(dir, gitDaysAgoCmd, (err, ref) => {
 
   ref = ref.replace(/[\r\n\s]+/g, '')
 
-  gitexec.execCollect(dir, gitMailmapCmd.replace(/\{\{ref\}\}/g, ref), (err, mailmap) => {
+  gitexec.execCollect(dir, gitMailmapCmd.replace(/\{\{ref\}\}/g, ref), (err, _mailmap) => {
     if (err) {
       console.log(`Could not find a ${dir}/.mailmap from ${days} ago, ignoring...`)
       return done()
     }
+
+    mailmap = _mailmap
 
     console.log(`Loaded ${dir}/.mailmap from ${days} ago with ${mailmap.split(/[\n\r]+/).length} entries...`)
 
@@ -152,6 +154,14 @@ function onDataComplete (err) {
       return false
 
     return true
+  })
+
+  let emails = []
+  pullRequests.reverse().forEach((pr) => {
+    let count = emails.filter((e) => e == pr.email).length
+    if (count)
+      pr.number += ` (${count + 1})`
+    emails.push(pr.email)
   })
 
   console.log(`\nNew contributors for the last ${days} day${days == 1 ? '' : 's:'}\n`)
